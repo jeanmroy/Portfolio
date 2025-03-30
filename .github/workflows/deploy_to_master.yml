@@ -1,0 +1,26 @@
+name: Deploy to VPS (Test)
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: SSH and Git Pull Test
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          port: 59000 # Add this line to specify the port
+          script: |
+            cd /home/debian/dev/Portfolio
+            git pull origin master
+            echo "Git pull test successful!"
